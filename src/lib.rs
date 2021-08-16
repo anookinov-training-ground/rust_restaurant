@@ -1,3 +1,5 @@
+// package -> crate(s) -> module(s) -> item(s) e.g. functions, structs, enums
+
 #[cfg(test)]
 mod tests {
     #[test]
@@ -6,18 +8,20 @@ mod tests {
     }
 }
 
-mod front_of_house {
-    pub mod hosting {
-        pub fn add_to_waitlist() {}
-        fn seat_at_table() {}
-    }
+// mod front_of_house {
+//     pub mod hosting {
+//         pub fn add_to_waitlist() {}
+//         fn seat_at_table() {}
+//     }
 
-    mod serving {
-        fn take_order() {}
-        fn serve_order() {}
-        fn take_payment() {}
-    }
-}
+//     mod serving {
+//         fn take_order() {}
+//         fn serve_order() {}
+//         fn take_payment() {}
+//     }
+// }
+
+mod front_of_house; // tells Rust to load the contents of the module from another file with the same name as the module
 
 fn serve_order() {}
 
@@ -49,12 +53,22 @@ mod back_of_house {
     }
 }
 
+use crate::front_of_house::hosting; // use with an absolute path
+// use self::front_of_house::hosting; // use with a relative path
+// use crate::front_of_house::hosting::add_to_waitlist; // ok but not recommended as it's not an idiomatic way (unclear as to where function is defined)
+
+// pub use crate::front_of_house::hosting; // re-exporting names with pub use
+
 pub fn eat_at_restaurant() {
     // Absolute path - opinionated preference
-    crate::front_of_house::hosting::add_to_waitlist();
+    // crate::front_of_house::hosting::add_to_waitlist();
+    
+    hosting::add_to_waitlist(); // with use keyword
+    hosting::add_to_waitlist();
+    hosting::add_to_waitlist();
 
     // Relative path
-    front_of_house::hosting::add_to_waitlist();
+    // front_of_house::hosting::add_to_waitlist();
 
     // Order a breakfast in the summer with Rye toast
     let mut meal = back_of_house::Breakfast::summer("Rye");
